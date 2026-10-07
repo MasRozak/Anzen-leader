@@ -1,0 +1,192 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ShieldCheck, UserCheck, AlertCircle, Loader2, KeyRound } from 'lucide-react';
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [roleTab, setRoleTab] = useState<'ANZEN_LEADER' | 'STAFF_INTERNAL'>('ANZEN_LEADER');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          role: roleTab,
+          identifier: identifier.trim(),
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMessage(data.error || 'Login gagal. Silakan periksa kembali kredensial Anda.');
+        setLoading(false);
+        return;
+      }
+
+      router.push(data.redirectUrl);
+      router.refresh();
+    } catch {
+      setErrorMessage('Terjadi kesalahan jaringan atau server.');
+      setLoading(false);
+    }
+  };
+
+  const setDemoAccount = (role: 'ANZEN_LEADER' | 'STAFF_INTERNAL', id: string, pass: string) => {
+    setRoleTab(role);
+    setIdentifier(id);
+    setPassword(pass);
+    setErrorMessage('');
+  };
+
+  return (
+    <div className="min-h-screen bg-neutral-100 flex flex-col justify-center py-8 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        {/* Brand Header */}
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center p-2 mb-2">
+            <span className="text-3xl font-black tracking-wider text-toyota-red">TOYOTA</span>
+          </div>
+          <h2 className="text-xl font-bold tracking-tight text-neutral-800">
+            Sistem Absensi Harian Anzen Leader
+          </h2>
+          <p className="mt-1 text-xs text-neutral-500">
+            Toyota Motor Manufacturing Indonesia
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0">
+        <div className="bg-white py-6 px-6 sm:px-8 shadow-sm border border-neutral-200 rounded-lg">
+          {/* Role Tabs */}
+          <div className="flex border-b border-neutral-200 mb-6">
+            <button
+              type="button"
+              onClick={() => {
+                setRoleTab('ANZEN_LEADER');
+                setIdentifier('');
+                setPassword('');
+                setErrorMessage('');
+              }}
+              className={`flex-1 py-3 text-sm font-semibold flex items-center justify-center gap-2 border-b-2 transition-colors ${
+                roleTab === 'ANZEN_LEADER'
+                  ? 'border-toyota-red text-toyota-red'
+                  : 'border-transparent text-neutral-500 hover:text-neutral-700'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Anzen Leader
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setRoleTab('STAFF_INTERNAL');
+                setIdentifier('');
+                setPassword('');
+                setErrorMessage('');
+              }}
+              className={`flex-1 py-3 text-sm font-semibold flex items-center justify-center gap-2 border-b-2 transition-colors ${
+                roleTab === 'STAFF_INTERNAL'
+                  ? 'border-toyota-red text-toyota-red'
+                  : 'border-transparent text-neutral-500 hover:text-neutral-700'
+              }`}
+            >
+              <UserCheck className="w-4 h-4" />
+              Staff Internal
+            </button>
+          </div>
+
+          {errorMessage && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1">
+                {roleTab === 'ANZEN_LEADER' ? 'Nomor Kartu AL (Anzen Leader)' : 'Username Staff'}
+              </label>
+              <input
+                type="text"
+                required
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                placeholder={roleTab === 'ANZEN_LEADER' ? 'Contoh: 123456' : 'Contoh: staff_sunter1'}
+                className="w-full px-3 py-2 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-toyota-red focus:border-toyota-red"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Masukkan password"
+                className="w-full px-3 py-2 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-toyota-red focus:border-toyota-red"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-2 py-2.5 px-4 border border-transparent rounded text-sm font-bold text-white bg-toyota-red hover:bg-toyota-darkRed transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-toyota-red disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Memproses Masuk...
+                </>
+              ) : (
+                'Masuk ke Sistem'
+              )}
+            </button>
+          </form>
+
+          {/* Quick Demo Helper */}
+          <div className="mt-6 pt-5 border-t border-neutral-100">
+            <div className="flex items-center gap-1.5 text-xs text-neutral-500 font-semibold mb-2">
+              <KeyRound className="w-3.5 h-3.5 text-neutral-400" />
+              <span>Akun Demo Cepat (Klik untuk isi otomatis):</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <button
+                type="button"
+                onClick={() => setDemoAccount('ANZEN_LEADER', '123456', 'anzen123')}
+                className="text-left p-2 rounded bg-neutral-50 hover:bg-red-50 border border-neutral-200 hover:border-red-200 transition-colors"
+              >
+                <div className="font-bold text-neutral-800">AL: Fia</div>
+                <div className="text-[10px] text-neutral-500 font-mono">123456 / anzen123</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDemoAccount('STAFF_INTERNAL', 'staff_sunter1', 'staff123')}
+                className="text-left p-2 rounded bg-neutral-50 hover:bg-red-50 border border-neutral-200 hover:border-red-200 transition-colors"
+              >
+                <div className="font-bold text-neutral-800">Staff Sunter 1</div>
+                <div className="text-[10px] text-neutral-500 font-mono">staff_sunter1 / staff123</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
