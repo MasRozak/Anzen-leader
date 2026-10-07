@@ -1,0 +1,59 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ANZEN_LEADER
+  STAFF_INTERNAL
+}
+
+model User {
+  id           String      @id @default(cuid())
+  role         Role
+  name         String
+  cardNumber   String?     @unique
+  username     String?     @unique
+  passwordHash String
+  companyName  String?
+  department   String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  attendances  AttendanceRecord[]
+
+  @@map("users")
+}
+
+model AttendanceRecord {
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  companyName        String
+  anzenLeaderName    String
+  cardNumber         String
+  date               DateTime @db.Date
+  
+  projectName        String
+  locationDetail     String
+  manpowerCount      Int
+  userDepartment     String
+  workStartTime      String
+  workEndTime        String
+  
+  stop6Hazards       String[]
+  preventiveControl  String   @db.Text
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([date])
+  @@index([cardNumber])
+  @@index([companyName])
+  @@map("attendance_records")
+}
