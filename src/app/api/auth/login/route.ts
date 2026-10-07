@@ -75,11 +75,15 @@ export async function POST(request: Request) {
       redirectUrl,
     });
 
+    // Hanya gunakan secure: true jika protokolnya HTTPS (agar cookie tidak diblokir browser saat akses lewat IP HTTP)
+    const forwardedProto = request.headers.get('x-forwarded-proto');
+    const isHttps = forwardedProto ? forwardedProto === 'https' : request.url.startsWith('https:');
+
     response.cookies.set({
       name: COOKIE_NAME,
       value: token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isHttps,
       sameSite: 'lax',
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 hari

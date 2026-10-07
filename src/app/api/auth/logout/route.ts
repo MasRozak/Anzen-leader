@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
 import { COOKIE_NAME } from '@/lib/auth';
 
-export async function POST() {
+export async function POST(request: Request) {
+  const forwardedProto = request.headers.get('x-forwarded-proto');
+  const isHttps = forwardedProto ? forwardedProto === 'https' : request.url.startsWith('https:');
+
   const response = NextResponse.json({ success: true, message: 'Berhasil keluar' });
   response.cookies.set({
     name: COOKIE_NAME,
     value: '',
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: isHttps,
     sameSite: 'lax',
     path: '/',
     maxAge: 0,
