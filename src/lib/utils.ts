@@ -31,9 +31,21 @@ export function getCurrentTimeHHmm(date = new Date()): string {
 export function isProjectOngoingNow(
   startTime: string,
   endTime: string,
-  currentTimeStr?: string
+  currentTimeStr?: string,
+  recordDate?: string | Date
 ): boolean {
   if (!startTime || !endTime) return false;
+
+  // If recordDate is provided, it must match today's date
+  if (recordDate) {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const recStr =
+      typeof recordDate === 'string'
+        ? recordDate.split('T')[0]
+        : recordDate.toISOString().split('T')[0];
+    if (recStr !== todayStr) return false;
+  }
+
   const current = currentTimeStr || getCurrentTimeHHmm();
   return current >= startTime && current <= endTime;
 }
@@ -64,7 +76,7 @@ export function calculateStaffKpis(
     if (item.anzenLeaderName) distinctLeaders.add(item.anzenLeaderName.trim().toLowerCase());
     totalMp += Number(item.manpowerCount) || 0;
 
-    if (isProjectOngoingNow(item.workStartTime, item.workEndTime, currentTimeStr)) {
+    if (isProjectOngoingNow(item.workStartTime, item.workEndTime, currentTimeStr, item.date)) {
       ongoingCount++;
     }
   }

@@ -19,6 +19,17 @@ describe('Task 8: Staff Internal Metrics & Ongoing Projects Logic', () => {
     expect(isProjectOngoingNow('08:00', '16:00', '16:00')).toBe(true);
   });
 
+  it('should not consider records from other dates as ongoing even if time matches', () => {
+    const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+    // Today record at 10:00 within 08:00-16:00 -> ongoing
+    expect(isProjectOngoingNow('08:00', '16:00', '10:00', today)).toBe(true);
+
+    // Yesterday record at 10:00 within 08:00-16:00 -> NOT ongoing!
+    expect(isProjectOngoingNow('08:00', '16:00', '10:00', yesterday)).toBe(false);
+  });
+
   it('should calculate the 5 KPI metrics correctly', () => {
     const mockAttendances = [
       {

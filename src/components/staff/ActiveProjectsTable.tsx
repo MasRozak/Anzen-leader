@@ -7,7 +7,7 @@ interface ActiveProjectsTableProps {
 
 export const ActiveProjectsTable: React.FC<ActiveProjectsTableProps> = ({ records }) => {
   const activeRecords = records.filter((r) =>
-    isProjectOngoingNow(r.workStartTime, r.workEndTime)
+    isProjectOngoingNow(r.workStartTime, r.workEndTime, undefined, r.date)
   );
 
   return (
