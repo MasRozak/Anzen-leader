@@ -1,10 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import Stop6HazardGroup from './Stop6HazardGroup';
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+
+const LocationPickerMap = dynamic(() => import('./LocationPickerMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-64 sm:h-72 bg-neutral-50 rounded border border-neutral-300 flex items-center justify-center text-xs text-neutral-400">
+      Memuat Peta Leaflet & OpenStreetMap...
+    </div>
+  ),
+});
 
 interface AttendanceFormProps {
   onSuccess?: () => void;
@@ -160,11 +170,11 @@ export const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSuccess, curre
             required
           />
           <Input
-            label="Detail lokasi"
-            name="locationDetail"
-            value={formData.locationDetail}
+            label="User (departemen pemberi pekerjaan)"
+            name="userDepartment"
+            value={formData.userDepartment}
             onChange={handleChange}
-            placeholder="Contoh: PGD, Assembly 1"
+            placeholder="Contoh: User Sunter 1"
             required
           />
 
@@ -180,14 +190,6 @@ export const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSuccess, curre
             required
           />
           <Input
-            label="User (departemen pemberi pekerjaan)"
-            name="userDepartment"
-            value={formData.userDepartment}
-            onChange={handleChange}
-            placeholder="Contoh: User Sunter 1"
-            required
-          />
-          <Input
             label="Waktu kerja: mulai"
             name="workStartTime"
             type="time"
@@ -195,8 +197,6 @@ export const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSuccess, curre
             onChange={handleChange}
             required
           />
-
-          {/* Row 4: Waktu kerja: selesai */}
           <Input
             label="Waktu kerja: selesai"
             name="workEndTime"
@@ -206,6 +206,12 @@ export const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSuccess, curre
             required
           />
         </div>
+
+        {/* Location Picker Map with Leaflet & Autocomplete (Above STOP 6) */}
+        <LocationPickerMap
+          value={formData.locationDetail}
+          onChange={(loc) => setFormData((prev) => ({ ...prev, locationDetail: loc }))}
+        />
 
         {/* STOP 6 Section */}
         <Stop6HazardGroup
