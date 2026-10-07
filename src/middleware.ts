@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/request';
+import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'toyota-anzen-leader-super-secret-jwt-key-2026-production';
