@@ -57,7 +57,12 @@ export default function LoginPage() {
         {/* Brand Header */}
         <div className="text-center">
           <div className="inline-flex items-center justify-center p-2 mb-2">
-            <span className="text-3xl font-black tracking-wider text-toyota-red">TOYOTA</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/toyota-logo.svg"
+              alt="TOYOTA"
+              className="h-8 sm:h-9 w-auto object-contain select-none"
+            />
           </div>
           <h2 className="text-xl font-bold tracking-tight text-neutral-800">
             Sistem Absensi Harian Anzen Leader

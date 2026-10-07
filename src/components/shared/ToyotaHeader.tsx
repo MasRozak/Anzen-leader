@@ -29,9 +29,12 @@ export const ToyotaHeader: React.FC<ToyotaHeaderProps> = ({
 
         {/* Right Side: Toyota Logo & Keluar Button */}
         <div className="flex items-center justify-between sm:justify-end gap-5">
-          <span className="text-xl sm:text-2xl font-black tracking-widest text-toyota-red select-none">
-            TOYOTA
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/toyota-logo.svg"
+            alt="TOYOTA"
+            className="h-6 sm:h-7 w-auto object-contain select-none"
+          />
           <LogoutButton />
         </div>
       </div>
