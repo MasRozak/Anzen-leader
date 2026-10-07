@@ -2,13 +2,15 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck, UserCheck, AlertCircle, Loader2, KeyRound } from 'lucide-react';
+import { ShieldCheck, UserCheck, AlertCircle, Loader2, KeyRound, Eye, EyeOff } from 'lucide-react';
+import FloatingInput from '@/components/ui/FloatingInput';
 
 export default function LoginPage() {
   const router = useRouter();
   const [roleTab, setRoleTab] = useState<'ANZEN_LEADER' | 'STAFF_INTERNAL'>('ANZEN_LEADER');
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -114,45 +116,51 @@ export default function LoginPage() {
           </div>
 
           {errorMessage && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-xs flex items-center gap-2">
+            <div className="mb-5 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{errorMessage}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1">
-                {roleTab === 'ANZEN_LEADER' ? 'Nomor Kartu AL (Anzen Leader)' : 'Username Staff'}
-              </label>
-              <input
+              <FloatingInput
+                id="login-identifier"
                 type="text"
                 required
+                label={roleTab === 'ANZEN_LEADER' ? 'Nomor Kartu Anzen Leader' : 'Username Staff'}
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                placeholder={roleTab === 'ANZEN_LEADER' ? 'Contoh: 123456' : 'Contoh: staff_sunter1'}
-                className="w-full px-3 py-2 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-toyota-red focus:border-toyota-red"
+                autoComplete="username"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1">
-                Password
-              </label>
-              <input
-                type="password"
+              <FloatingInput
+                id="login-password"
+                type={showPassword ? 'text' : 'password'}
                 required
+                label="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Masukkan password"
-                className="w-full px-3 py-2 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-toyota-red focus:border-toyota-red"
+                autoComplete="current-password"
+                endAdornment={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="p-1 text-neutral-400 hover:text-neutral-600 focus:outline-none"
+                    aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                }
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 py-2.5 px-4 border border-transparent rounded text-sm font-bold text-white bg-toyota-red hover:bg-toyota-darkRed transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-toyota-red disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full mt-2 py-2.5 px-4 border border-transparent rounded-lg text-sm font-bold text-white bg-toyota-red hover:bg-toyota-darkRed transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-toyota-red disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
             >
               {loading ? (
                 <>

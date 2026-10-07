@@ -251,10 +251,10 @@ export const LocationPickerMap: React.FC<LocationPickerMapProps> = ({ value, onC
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
         <label className="text-xs font-semibold text-neutral-800 uppercase tracking-wider flex items-center gap-1.5">
           <MapPin className="w-3.5 h-3.5 text-toyota-red" />
-          Detail Lokasi Proyek (Pilih pada Peta Leaflet + OpenStreetMap)
+          Detail Lokasi Proyek
         </label>
         <span className="text-[11px] text-neutral-400">
-          Klik peta atau cari dengan auto complete untuk menandai titik
+          Geser pin di peta atau pilih lokasi dari hasil pencarian untuk menandai titik lokasi proyek.
         </span>
       </div>
 
@@ -269,7 +269,7 @@ export const LocationPickerMap: React.FC<LocationPickerMapProps> = ({ value, onC
             onFocus={() => {
               if (autocompleteSuggestions.length > 0) setIsDropdownOpen(true);
             }}
-            placeholder="Cari lokasi dengan auto complete (contoh: Sunter 1, Karawang, Assembly, dll)..."
+            placeholder="Cari lokasi Proyek"
             className="w-full pl-9 pr-10 py-2 text-xs sm:text-sm bg-neutral-50 border border-neutral-300 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-toyota-red focus:border-toyota-red"
           />
           {searching ? (
