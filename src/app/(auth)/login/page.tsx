@@ -172,32 +172,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* Quick Demo Helper */}
-          <div className="mt-6 pt-5 border-t border-neutral-100">
-            <div className="flex items-center gap-1.5 text-xs text-neutral-500 font-semibold mb-2">
-              <KeyRound className="w-3.5 h-3.5 text-neutral-400" />
-              <span>Akun Demo Cepat (Klik untuk isi otomatis):</span>
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <button
-                type="button"
-                onClick={() => setDemoAccount('ANZEN_LEADER', '123456', 'anzen123')}
-                className="text-left p-2 rounded bg-neutral-50 hover:bg-red-50 border border-neutral-200 hover:border-red-200 transition-colors"
-              >
-                <div className="font-bold text-neutral-800">AL: Fia</div>
-                <div className="text-[10px] text-neutral-500 font-mono">123456 / anzen123</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => setDemoAccount('STAFF_INTERNAL', 'staff_sunter1', 'staff123')}
-                className="text-left p-2 rounded bg-neutral-50 hover:bg-red-50 border border-neutral-200 hover:border-red-200 transition-colors"
-              >
-                <div className="font-bold text-neutral-800">Staff Sunter 1</div>
-                <div className="text-[10px] text-neutral-500 font-mono">staff_sunter1 / staff123</div>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
