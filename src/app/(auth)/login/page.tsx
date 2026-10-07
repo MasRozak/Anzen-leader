@@ -38,19 +38,12 @@ export default function LoginPage() {
         return;
       }
 
-      router.push(data.redirectUrl);
-      router.refresh();
+      // Gunakan window.location.href agar sesi cookie baru terbaca sempurna oleh middleware dan server component
+      window.location.href = data.redirectUrl;
     } catch {
       setErrorMessage('Terjadi kesalahan jaringan atau server.');
       setLoading(false);
     }
-  };
-
-  const setDemoAccount = (role: 'ANZEN_LEADER' | 'STAFF_INTERNAL', id: string, pass: string) => {
-    setRoleTab(role);
-    setIdentifier(id);
-    setPassword(pass);
-    setErrorMessage('');
   };
 
   return (
