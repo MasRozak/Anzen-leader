@@ -62,9 +62,23 @@ export async function verifySessionToken(token: string): Promise<SessionUser | n
   }
 }
 
-export async function getSession(): Promise<SessionUser | null> {
-  const cookieStore = cookies();
-  const token = cookieStore.get(COOKIE_NAME)?.value;
-  if (!token) return null;
-  return verifySessionToken(token);
+export async function getSession(req?: Request): Promise<SessionUser | null> {
+  if (req) {
+    const cookieHeader = req.headers.get('cookie');
+    if (cookieHeader) {
+      const match = cookieHeader.match(new RegExp(`(?:^|; )${COOKIE_NAME}=([^;]*)`));
+      if (match) {
+        return verifySessionToken(match[1]);
+      }
+    }
+  }
+
+  try {
+    const cookieStore = cookies();
+    const token = cookieStore.get(COOKIE_NAME)?.value;
+    if (!token) return null;
+    return verifySessionToken(token);
+  } catch {
+    return null;
+  }
 }
