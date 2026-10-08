@@ -26,7 +26,7 @@ describe('Task 10: End-to-End System Workflow Integration', () => {
       companyName: session!.companyName || 'PT Vendor',
       anzenLeaderName: session!.name,
       cardNumber: session!.cardNumber || '',
-      date: '2026-10-07',
+      date: new Date().toISOString().split('T')[0],
       projectName: 'Pemasangan Conveyor Line 3',
       locationDetail: 'Assembly Plant Sunter 1',
       manpowerCount: 6,

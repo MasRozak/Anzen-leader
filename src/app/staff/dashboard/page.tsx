@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import SummaryCards from '@/components/staff/SummaryCards';
+import TodayProjectsMap from '@/components/staff/TodayProjectsMap';
 import ActiveProjectsTable from '@/components/staff/ActiveProjectsTable';
 import AttendanceDetailTable from '@/components/staff/AttendanceDetailTable';
 import PdfExportSection from '@/components/staff/PdfExportSection';
@@ -50,14 +51,18 @@ export default function StaffDashboardPage() {
       {/* 1. Summary Cards */}
       <SummaryCards metrics={metrics} />
 
-      {/* 2. Project yang sedang berlangsung */}
+      {/* 2. Map Sebaran Titik Proyek Hari Ini */}
+      <TodayProjectsMap records={records} />
+
+      {/* 3. Project yang sedang berlangsung */}
       <ActiveProjectsTable records={records} />
 
-      {/* 3. Detail absensi */}
+      {/* 4. Detail absensi */}
       <AttendanceDetailTable records={records} />
 
-      {/* 4. Cetak PDF */}
+      {/* 5. Cetak PDF */}
       <PdfExportSection records={records} />
     </div>
   );
 }
+
