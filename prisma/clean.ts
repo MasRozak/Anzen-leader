@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const SEED_CARD_NUMBERS = ['123456', '654321', '112233'];
+export const SEED_CARD_NUMBERS = ['123456', '654321', '112233', '445566', '778899'];
 export const SEED_USERNAMES = ['staff_sunter1', 'staff_karawang'];
 
 export async function cleanDatabase() {

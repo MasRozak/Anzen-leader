@@ -27,4 +27,16 @@ describe('Task 2: Database Schema & Seed Data', () => {
     expect(seedContent).toContain('staff_sunter1');
     expect(seedContent).toContain('buat meja');
   });
+
+  it('should contain at least 10 diverse attendance records with ongoing and historical projects in seed.ts', () => {
+    const seedPath = path.resolve(process.cwd(), 'prisma/seed.ts');
+    const seedContent = fs.readFileSync(seedPath, 'utf-8');
+    expect(seedContent).toContain('ONGOING PROJECTS');
+    expect(seedContent).toContain('HISTORICAL RECORDS');
+    expect(seedContent).toContain('Instalasi Konveyor Line 3');
+    expect(seedContent).toContain('Perbaikan Atap Gudang B');
+    expect(seedContent).toContain('Pengecatan & Coating Lantai Epoxy Press Shop');
+    expect(seedContent).toContain('Overhaul Pompa Sirkulasi Cooling Tower');
+    expect(seedContent).toContain('Pembersihan Saluran Drainase Under-Pit');
+  });
 });

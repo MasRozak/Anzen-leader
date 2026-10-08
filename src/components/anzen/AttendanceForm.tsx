@@ -25,20 +25,18 @@ interface AttendanceFormProps {
   };
 }
 
-export const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSuccess, currentUser }) => {
-  const todayStr = new Date().toISOString().split('T')[0];
-
+export const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
-    companyName: currentUser?.companyName || '',
-    anzenLeaderName: currentUser?.name || '',
-    cardNumber: currentUser?.cardNumber || '',
-    date: todayStr,
+    companyName: '',
+    anzenLeaderName: '',
+    cardNumber: '',
+    date: '',
     projectName: '',
     locationDetail: '',
     manpowerCount: '',
     userDepartment: '',
-    workStartTime: '08:00',
-    workEndTime: '16:00',
+    workStartTime: '',
+    workEndTime: '',
     preventiveControl: '',
   });
 
@@ -79,16 +77,16 @@ export const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSuccess, curre
       setSuccessMessage('Absensi hari ini berhasil dikirim!');
       // Reset form fields
       setFormData({
-        companyName: currentUser?.companyName || '',
-        anzenLeaderName: currentUser?.name || '',
-        cardNumber: currentUser?.cardNumber || '',
-        date: todayStr,
+        companyName: '',
+        anzenLeaderName: '',
+        cardNumber: '',
+        date: '',
         projectName: '',
         locationDetail: '',
         manpowerCount: '',
         userDepartment: '',
-        workStartTime: '08:00',
-        workEndTime: '16:00',
+        workStartTime: '',
+        workEndTime: '',
         preventiveControl: '',
       });
       setSelectedHazards([]);
@@ -96,6 +94,11 @@ export const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSuccess, curre
       if (onSuccess) {
         onSuccess();
       }
+
+      // Auto refresh halaman setelah absensi berhasil dikirim
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
     } catch {
       setErrorMessage('Terjadi kesalahan jaringan atau server.');
     } finally {
